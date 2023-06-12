@@ -33,17 +33,6 @@ function returnFirstArgument(arg) {
    sumWithDefaults(10) вернет 110
  */
 
-// 2.1
-function sum(...someargs) {
-  let result = 0;
-  let i;
-  for (i = 0; i < someargs.length; i++) {
-    result = result + someargs[i];
-  }
-  return result
-}
-
-// 2.2
 function sumWithDefaults(a, b = 100) {
   return a + b;
 }
