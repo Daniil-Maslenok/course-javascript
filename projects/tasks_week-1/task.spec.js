@@ -36,7 +36,6 @@ function returnFirstArgument(arg) {
 // 2.1
 function sum(...someargs) {
   let result = 0;
-  let i;
   for (i = 0; i < someargs.length; i++) {
     result = result + someargs[i];
   }
