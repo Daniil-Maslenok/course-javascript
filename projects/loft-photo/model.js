@@ -24,7 +24,7 @@ export default {
   findSize(photo) {
     const size = photo.sizes.find((size) => size.width >= 360);
 
-    if (!sizes) {
+    if (!size) {
       return current.sizes.reduce((biggest, current) => {
         if (current.width > biggest.width) {
           return current;
@@ -105,7 +105,7 @@ export default {
     this.photoCache[id] = photos;
 
     return photos;
-  }
+  },
 
   getUsers(ids) {
     const params = {
