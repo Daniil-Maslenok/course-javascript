@@ -24,7 +24,7 @@ export default {
   findSize(photo) {
     const size = photo.sizes.find((size) => size.width >= 360);
 
-    if (!sizes) {
+    if (!size) {
       return current.sizes.reduce((biggest, current) => {
         if (current.width > biggest.width) {
           return current;
@@ -44,11 +44,12 @@ export default {
   login() {
     return new Promise((resolve, reject) => {
       VK.init({
-        apiId: 51700158,
+        apiId: APP_ID,
       });
 
       VK.Auth.login((response) => {
         if (response.session) {
+          this.token = response.session.sid;
           resolve(response);
         } else {
           console.error(response);
@@ -104,7 +105,7 @@ export default {
     this.photoCache[id] = photos;
 
     return photos;
-  }
+  },
 
   getUsers(ids) {
     const params = {
@@ -117,4 +118,43 @@ export default {
 
     return this.callApi('user.get', params);
   },
+
+  async callServer(method, queryParams, body) {
+    queryParams = { ...queryParams, method };
+    const query = Object.entries(queryParams)
+      .reduce((all, [name, value]) => { }, [])
+      .join('&');
+    const params = {
+      headers: {
+        vk_token: this.token,
+      },
+    };
+
+    if (body) {
+      params.method = 'POST';
+      params.body = JSON.stringify(body);
+    }
+
+    const response = await fetch('/loft-photo/api.${query}', params);
+
+    return response.json();
+  },
+
+
+  async like(photo) {
+    return this.callServer('like', { photo });
+  },
+
+  async photoStats(photo) {
+    return this.callServer('photoStats', { photo });
+  },
+
+  async getComments(photo) {
+    return this.callServer('getComments', { photo });
+  },
+
+  async postComment(photo, text) {
+    return this.callServer('postComment', { photo }, { text });
+  },
+
 };
